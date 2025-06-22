@@ -1,0 +1,7 @@
+pandas
+numpy
+scipy
+matplotlib
+seaborn
+scikit_learn
+xlrd >= 2.0.1
