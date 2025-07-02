@@ -1,0 +1,5 @@
+.ipynb_checkpoints/
+data/GaiaSource_030828-031045.csv
+
+data/GaiaSource_*.csv
+data/GaiaSource_*.csv
