@@ -1,0 +1,280 @@
+\documentclass{beamer}
+\usetheme{Warsaw}
+\usepackage{amsmath}
+\usepackage{braket}
+\usepackage{caption}
+\usepackage{url} 
+\newcommand{\Lagr}{\mathcal{L}}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+
+\definecolor{myblue}{rgb}{0.0, 0.28, 0.67}
+\usecolortheme[named=myblue]{structure} 
+
+\title{Support Vector Machines}
+\author{} % remove your name from footer
+\institute{Department of Physics and Astronomy}
+\date{05 October 2025}
+
+
+
+% Custom footline: title on left, department on right
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1ex,left]{author in head/foot}%
+    \hspace*{2ex}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1ex,right]{author in head/foot}%
+    \insertshortinstitute\hspace*{2ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+
+\begin{document}
+
+% Title slide
+\begin{frame}
+\titlepage
+\vspace{1em}
+\centering
+\small 
+\end{frame}
+
+
+
+\begin{frame}[t]{Introduction: SVM}\vspace{9.7mm}
+\begin{itemize}
+\item Support Vector Machines (SVM) is a type of supervised Machine Learning algorithm used for classification and regression
+\vspace{0.5cm}
+\item It constructs the optimal hyperplane in high dimensional feature space to separate data points of different classes
+\vspace{0.5cm}
+\item The algorith maximize the margin - distance between the decision boundary (Bernhard Boser, 1992)
+\vspace{0.5cm}
+
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{How does SVM works?}\vspace{0.4cm}
+%\large{}
+%\begin{itemize}
+%\item  
+%\vspace{0.1cm}
+%\item 
+%\vspace{0.1cm}
+%\item
+%\end{itemize}
+\vspace{0.4cm}
+\centering  % center everything on the slide
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{plane1.png}
+    \caption{1: Hyperplane (line separating two classes) - staight line in $\mathbb{R}^2$ and plane in $\mathbb{R}^3$}
+\end{figure}
+
+
+%\begin{figure}
+%    \includegraphics[width=0.7\textwidth]{}
+%    \caption{1:}
+%\end{figure}
+
+
+
+
+
+\end{frame}
+
+
+
+
+
+
+
+\begin{frame}{How SVM works}
+\begin{center}
+\begin{minipage}{0.5\textwidth} % Left: figure
+    \centering
+    \includegraphics[width=\textwidth]{Screenshot 2025-10-15 014203.png}
+    \captionof{figure}{3: SVM Illustration}
+\end{minipage}%
+\hfill
+\begin{minipage}{0.3\textwidth} % Right: equations
+    \small % makes the equations slightly smaller, but still readable
+    \[
+    H_1: \; \; w^TX + b_0 = 1
+    \]
+    \[
+    H_0: \; \; w^TX + b_0 =  0
+    \]
+    \[
+    H_2: \; \;w^TX + b_0 = -1
+    \]
+\end{minipage}
+\end{center}
+
+\[
+\text{SVM: } \text{maximize margin } \; d\; = \frac{2}{\|w\|} \text{ subject to } y_i(w \cdot x_i + b) \ge 1
+\]
+% You can add more equations or text here
+
+\begin{itemize}
+\vspace{0.1cm}
+\item To maximize $d,$ we must minimize the square of $w$
+\end{itemize}
+
+
+\end{frame}
+
+
+\begin{frame}{The SVM training workflow}
+
+
+
+\centering
+\tikzstyle{box} = [rectangle, rounded corners, minimum width=6cm, 
+                   minimum height=1cm, text centered, draw=blue!70, 
+                   fill=blue!10, font=\small, thick]
+\tikzstyle{arrow} = [thick, ->, >=Stealth]
+
+\begin{tikzpicture}[node distance=1.5cm]
+
+% Nodes (stacked vertically)
+\node (step1) [box] {Step 1: Input data points ${x_1, x_2, x_3, \ldots, x_n}$};
+\node (step2) [box, below of=step1] {Step 2: Find possible separating planes};
+\node (step3) [box, below of=step2] {Step 3: Choose the maximum-margin hyperplane};
+\node (step4) [box, below of=step3] {Step 4: Use support vectors to define the boundary};
+
+% Arrows
+\draw [arrow] (step1) -- (step2);
+\draw [arrow] (step2) -- (step3);
+\draw [arrow] (step3) -- (step4);
+
+\end{tikzpicture}
+
+
+
+
+
+
+\end{frame}
+
+
+
+
+
+
+
+\begin{frame}{The maximum margin}
+\begin{block}{Quadratic programming problem}
+
+\[\textbf{f:} \; \; min \;\frac{1}{2} ||w||^2 \; \; s.t \;\; \textbf{g:} \; y_i(w^T \cdot x_i + b_0) - 1 = 0
+\]
+\end{block}
+\vspace{0.3cm}
+\begin{itemize}
+\item We solve the above using Lagrangian multiplier method, \displaystyle \Lagr
+\end{itemize}
+
+\begin{equation}
+\displaystyle \Lagr (w, b_0,\alpha)  \; =\; \frac{1}{2}||w||^2 \; + \;  \sum_i^n \alpha_i  \;[\;y_i  *(w^T x_i  +b_0 )-1\;]   
+\end{equation}
+
+\hspace{0.3cm} Where, n - number of training data points, $w_i$ - weights and  $\alpha_i$ - Lagrange multipliers
+\vspace{0.1cm}
+\begin{itemize}
+\item To solve the $\Lagr$ we set the following conditions
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}[t]{Maximum margin}
+\vspace{0.2cm}
+\begin{itemize}
+\item To solve the $\Lagr$ we set the following conditions
+\end{itemize}
+
+\begin{equation}
+\frac{\partial L}{\partial w} = 0, \; \; \; \frac{\partial L}{\partial \alpha} = 0 , \; \; \; \frac{\partial L}{\partial b_0} = 0
+\end{equation}
+
+\begin{itemize}
+\item After deriving and substituting back to $\Lagr$, we get dual optimazation problem
+\end{itemize}
+
+\[
+L_d = -\frac{1}{2} \sum_i \sum_k \alpha_i \alpha_k y_i y_k (x_i)^T (x_k) + \sum_i \alpha_i
+\]
+
+such that, 
+
+\end{frame}
+
+\begin{frame}[t]{Example from Literature (Benhard E. Boser, 1992)}
+\vspace{0.4cm}
+
+
+\centering
+\includegraphics[width=\textwidth]{image.png}
+
+
+
+\begin{itemize}
+\item Spport vectors (training data) ranked by alpha $\alpha_i$. Note, both rows from the same class
+\end{itemize}
+
+
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{frame}[t]{References}\vspace{1.5cm}
+
+\begin{itemize}
+    \item Boser, B. E., Guyon, I. M., & Vapnik, V. (1992). A Training Algorithm for Optimal Margin Classifiers. \url {https://dl.acm.org/doi/pdf/10.1145/130385.130401}
+    \vspace{0.2cm}
+
+    \item 
+
+    \vspace{0.2cm}
+    
+    \item 
+    
+    \item 
+\end{itemize}
+\end{frame}
+
+\begin{frame}[plain]
+\centering
+\vspace{2cm}
+{\Huge \textbf{Thank You!}} \\[1cm]
+{\Large Questions?}
+\end{frame}
+
+
+
+
+
+\end{document}
