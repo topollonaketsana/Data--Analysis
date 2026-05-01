@@ -1,2 +1,5 @@
 *.parquet
 *.parquet
+*.parquet
+__MACOSX/
+.ipynb_checkpoints/ 
