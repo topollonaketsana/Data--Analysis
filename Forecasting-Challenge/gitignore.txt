@@ -1,5 +1,0 @@
-data/
-*.parquet
-__MACOSX/
-.ipynb_checkpoints/ 
-
